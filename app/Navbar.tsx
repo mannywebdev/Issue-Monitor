@@ -11,8 +11,6 @@ const Navbar = () => {
   const links = [
     { label: "Dashboard", path: "/" },
     { label: "Issues", path: "/issues" },
-    { label: "Docs", path: "/not" },
-    { label: "Pricing", path: "/ijix" },
   ];
   return (
     <nav className="flex justify-between items-center border-b h-14 px-2 sm:px-6">

@@ -24,9 +24,9 @@ const Navbar = () => {
           {links.map((link) => (
             <Link
               className={classnames({
-                "h-14 flex items-center font-medium border-b-2 hover:border-blue-600":
+                "h-14 flex items-center font-medium border-b-2 hover:border-amber-500":
                   true,
-                "border-blue-600 text-zinc-800": path === link.path,
+                "border-amber-500 text-zinc-800": path === link.path,
                 "border-transparent text-zinc-500 hover:text-zinc-800 transition-colors":
                   path !== link.path,
               })}

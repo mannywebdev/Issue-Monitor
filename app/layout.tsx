@@ -27,7 +27,7 @@ export default function RootLayout({
       <body className={poppins.variable}>
         <Theme accentColor="amber">
           <Navbar />
-          <main>{children}</main>
+          <main className="container mx-auto px-4 py-8">{children}</main>
         </Theme>
       </body>
     </html>

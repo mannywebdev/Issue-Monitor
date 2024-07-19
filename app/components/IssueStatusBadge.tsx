@@ -11,9 +11,16 @@ const statusMap: Record<
   CLOSED: { label: "Closed", color: "green" },
 };
 
-const IssueStatusBadge = ({ status }: { status: Status }) => {
+interface Props {
+  status: Status;
+  size?: "1" | "2" | "3";
+}
+
+const IssueStatusBadge = ({ status, size = "1" }: Props) => {
   return (
-    <Badge color={statusMap[status].color}>{statusMap[status].label}</Badge>
+    <Badge color={statusMap[status].color} size={size}>
+      {statusMap[status].label}
+    </Badge>
   );
 };
 

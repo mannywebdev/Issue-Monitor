@@ -5,6 +5,7 @@ import { Box, Button, Card, Flex, Grid, Heading, Text } from "@radix-ui/themes";
 import ReactMarkdown from "react-markdown";
 import { Pencil2Icon } from "@radix-ui/react-icons";
 import Link from "next/link";
+import DeleteIssueButton from "./DeleteIssueButton";
 
 const IssueDetailPage = async ({ params }: { params: { id: string } }) => {
   const issue = await prisma.issue.findUnique({
@@ -30,9 +31,7 @@ const IssueDetailPage = async ({ params }: { params: { id: string } }) => {
             <Pencil2Icon />
             <Link href={`/issues/${issue.id}/edit`}>Edit Issues</Link>
           </Button>
-          <Button color="red" variant="soft">
-            Delete
-          </Button>
+          <DeleteIssueButton />
         </Flex>
       </Box>
     </Grid>

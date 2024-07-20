@@ -1,9 +1,12 @@
 import { NextRequest } from "next/server";
 import prisma from "@/prisma/client";
-import { sendErrorResponse, sendSuccessResponse } from "../responseUtils";
 import { issueSchema } from "@/app/validationSchema";
+import { sendErrorResponse, sendSuccessResponse } from "../../responseUtils";
 
-export async function POST(request: NextRequest) {
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
   const body = await request.json();
   const validation = issueSchema.safeParse(body);
   if (!validation.success) {
@@ -15,8 +18,16 @@ export async function POST(request: NextRequest) {
       400
     );
   }
-  const newIssue = await prisma.issue.create({
-    data: { ...body },
+  const issue = await prisma.issue.findUnique({
+    where: { id: parseInt(params.id) },
   });
-  return sendSuccessResponse(newIssue, 201);
+  if (!issue) return sendErrorResponse("Issue not found.", 404);
+
+  const updatedIssue = await prisma.issue.update({
+    where: { id: issue.id },
+    data: {
+      ...body,
+    },
+  });
+  return sendSuccessResponse(updatedIssue, 201);
 }

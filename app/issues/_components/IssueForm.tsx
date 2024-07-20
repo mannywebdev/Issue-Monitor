@@ -1,7 +1,6 @@
 "use client";
 import z from "zod";
 import axios from "axios";
-import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { Button, Callout, TextField } from "@radix-ui/themes";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
@@ -9,12 +8,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { issueSchema } from "@/app/validationSchema";
 import { Issue } from "@prisma/client";
 import ErrorMessage from "@/app/components/ErrorMessage";
+import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 import "./editor.css";
-
-const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
-  ssr: false,
-});
 
 type IssueFormData = z.infer<typeof issueSchema>;
 
@@ -32,8 +28,10 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
 
   const onSubmit: SubmitHandler<IssueFormData> = async (data) => {
     try {
-      await axios.post("/api/issues", data);
+      if (issue) await axios.patch("/api/issues/" + issue.id, data);
+      else await axios.post("/api/issues", data);
       router.push("/issues");
+      router.refresh();
     } catch (error) {
       setError("root", { message: "An unexpected error occurred." });
     }
@@ -44,7 +42,9 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
       className="max-w-lg mx-auto p-6 shadow-md rounded-lg"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <h1 className="text-2xl font-bold mb-4">Create New Issue</h1>
+      <h1 className="text-2xl font-bold mb-4">
+        {issue ? "Edit Issue" : "Create New Issue"}
+      </h1>
       {errors.root && (
         <Callout.Root className="mb-4" size="1" variant="surface">
           <Callout.Text>{errors.root.message}</Callout.Text>
@@ -70,7 +70,8 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
         <ErrorMessage>{errors.description?.message}</ErrorMessage>
       </div>
       <Button disabled={isSubmitting}>
-        {isSubmitting ? "Loading..." : "Submit"}
+        {issue ? "Update Issue" : "Submit Issue"}
+        {isSubmitting && "..."}
       </Button>
     </form>
   );

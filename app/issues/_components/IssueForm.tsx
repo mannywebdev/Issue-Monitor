@@ -69,7 +69,7 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
         />
         <ErrorMessage>{errors.description?.message}</ErrorMessage>
       </div>
-      <Button disabled={isSubmitting}>
+      <Button disabled={isSubmitting} variant="soft">
         {issue ? "Update Issue" : "Submit Issue"}
         {isSubmitting && "..."}
       </Button>

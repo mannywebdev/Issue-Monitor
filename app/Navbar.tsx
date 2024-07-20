@@ -26,8 +26,14 @@ const Navbar = () => {
               className={classnames({
                 "h-14 flex items-center font-medium border-b-2 hover:border-amber-500":
                   true,
-                "border-amber-500": path === link.path,
-                "border-transparent": path !== link.path,
+                "border-amber-500":
+                  link.path === "/"
+                    ? path === link.path
+                    : path.startsWith(link.path),
+                "border-transparent":
+                  link.path === "/"
+                    ? path !== link.path
+                    : !path.startsWith(link.path),
               })}
               key={link.path}
               href={link.path}

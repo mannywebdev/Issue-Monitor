@@ -1,15 +1,19 @@
 "use client";
 import z from "zod";
 import axios from "axios";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { Button, Callout, Text, TextField } from "@radix-ui/themes";
+import { Button, Callout, TextField } from "@radix-ui/themes";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createIssueSchema } from "@/app/validationSchema";
 import ErrorMessage from "@/app/components/ErrorMessage";
-import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 import "./editor.css";
+
+const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
+  ssr: false,
+});
 
 type IssueForm = z.infer<typeof createIssueSchema>;
 
@@ -33,9 +37,10 @@ const NewIssuePage = () => {
       setError("root", { message: "An unexpected error occurred." });
     }
   };
+
   return (
     <form
-      className="max-w-lg mx-auto p-6 shadow-md rounded-lg mt-8"
+      className="max-w-lg mx-auto p-6 shadow-md rounded-lg"
       onSubmit={handleSubmit(onSubmit)}
     >
       <h1 className="text-2xl font-bold mb-4">Create New Issue</h1>

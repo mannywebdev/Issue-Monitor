@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import { Theme, ThemePanel } from "@radix-ui/themes";
 import Navbar from "./Navbar";
+import AuthProvider from "./auth/Provider";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -25,10 +26,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={poppins.variable}>
-        <Theme accentColor="amber">
-          <Navbar />
-          <main className="container mx-auto px-4 py-8">{children}</main>
-        </Theme>
+        <AuthProvider>
+          <Theme accentColor="amber">
+            <Navbar />
+            <main className="container mx-auto px-4 py-8">{children}</main>
+          </Theme>
+        </AuthProvider>
       </body>
     </html>
   );

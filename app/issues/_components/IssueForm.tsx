@@ -2,7 +2,7 @@
 import z from "zod";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { Button, Callout, TextField } from "@radix-ui/themes";
+import { Button, Callout, Spinner, TextField } from "@radix-ui/themes";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { issueSchema } from "@/app/validationSchema";
@@ -71,7 +71,7 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
       </div>
       <Button disabled={isSubmitting} variant="soft">
         {issue ? "Update Issue" : "Submit Issue"}
-        {isSubmitting && "..."}
+        {isSubmitting && <Spinner />}
       </Button>
     </form>
   );

@@ -1,19 +1,22 @@
 "use client";
 import axios from "axios";
-import { AlertDialog, Button, Flex, Inset, Table } from "@radix-ui/themes";
+import { AlertDialog, Button, Flex, Spinner } from "@radix-ui/themes";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const DeleteIssueButton = ({ issueId }: { issueId: number }) => {
   const router = useRouter();
   const [error, setError] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const deleteIssue = () => {
     try {
+      setIsDeleting(true);
       axios.delete("/api/issues/" + issueId);
       router.push("/issues");
       router.refresh();
     } catch (error) {
+      setIsDeleting(false);
       setError(true);
     }
   };
@@ -22,12 +25,13 @@ const DeleteIssueButton = ({ issueId }: { issueId: number }) => {
     <>
       <AlertDialog.Root>
         <AlertDialog.Trigger>
-          <Button color="red" variant="soft">
+          <Button color="red" variant="soft" disabled={isDeleting}>
             Delete Issue
+            {isDeleting && <Spinner />}
           </Button>
         </AlertDialog.Trigger>
         <AlertDialog.Content maxWidth="500px">
-          <AlertDialog.Title>Delete Issue</AlertDialog.Title>
+          <AlertDialog.Title>Confirm Issue Delete</AlertDialog.Title>
           <AlertDialog.Description size="2">
             Are you sure you want to delete this issue? This action is permanent
             and cannot be undone.

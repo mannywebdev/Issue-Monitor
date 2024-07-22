@@ -72,6 +72,7 @@ const AuthStatus = () => {
           radius="full"
           size="2"
           className="cursor-pointer"
+          referrerPolicy="no-referrer"
         />
       </DropdownMenu.Trigger>
       <DropdownMenu.Content variant="soft" size="2">

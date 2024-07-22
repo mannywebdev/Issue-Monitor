@@ -6,8 +6,11 @@ import ReactMarkdown from "react-markdown";
 import { Pencil2Icon } from "@radix-ui/react-icons";
 import Link from "next/link";
 import DeleteIssueButton from "./DeleteIssueButton";
+import { getServerSession } from "next-auth";
+import authOptions from "@/app/auth/authOptions";
 
 const IssueDetailPage = async ({ params }: { params: { id: string } }) => {
+  const session = await getServerSession(authOptions);
   const issue = await prisma.issue.findUnique({
     where: { id: parseInt(params.id) },
   });
@@ -25,15 +28,17 @@ const IssueDetailPage = async ({ params }: { params: { id: string } }) => {
           <ReactMarkdown>{issue.description}</ReactMarkdown>
         </Card>
       </Box>
-      <Box>
-        <Flex gap="3" direction="column" justify="end">
-          <Button variant="soft">
-            <Pencil2Icon />
-            <Link href={`/issues/${issue.id}/edit`}>Edit Issues</Link>
-          </Button>
-          <DeleteIssueButton issueId={issue.id} />
-        </Flex>
-      </Box>
+      {session && (
+        <Box>
+          <Flex gap="3" direction="column" justify="end">
+            <Button variant="soft">
+              <Pencil2Icon />
+              <Link href={`/issues/${issue.id}/edit`}>Edit Issues</Link>
+            </Button>
+            <DeleteIssueButton issueId={issue.id} />
+          </Flex>
+        </Box>
+      )}
     </Grid>
   );
 };

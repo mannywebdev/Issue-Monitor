@@ -76,9 +76,9 @@ const AuthStatus = () => {
       </DropdownMenu.Trigger>
       <DropdownMenu.Content variant="soft" size="2">
         <DropdownMenu.Label>{session!.user!.email}</DropdownMenu.Label>
-        <DropdownMenu.Item>
-          <Link href="/api/auth/signout">Logout</Link>
-        </DropdownMenu.Item>
+        <Link href="/api/auth/signout">
+          <DropdownMenu.Item>Logout</DropdownMenu.Item>
+        </Link>
       </DropdownMenu.Content>
     </DropdownMenu.Root>
   );

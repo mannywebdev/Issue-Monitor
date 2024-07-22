@@ -5,10 +5,11 @@ import { PlusCircledIcon } from "@radix-ui/react-icons";
 const NewIssueAction = () => {
   return (
     <div className="mb-5">
-      <Button variant="soft">
-        <PlusCircledIcon />
-        <Link href="/issues/new">New Issue</Link>
-      </Button>
+      <Link href="/issues/new">
+        <Button variant="soft">
+          <PlusCircledIcon /> New Issue
+        </Button>
+      </Link>
     </div>
   );
 };

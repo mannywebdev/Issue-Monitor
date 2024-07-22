@@ -5,6 +5,7 @@ import { IoBug } from "react-icons/io5";
 import { usePathname } from "next/navigation";
 import classnames from "classnames";
 import { useSession } from "next-auth/react";
+import { DropdownMenu, Avatar } from "@radix-ui/themes";
 
 const Navbar = () => {
   const path = usePathname();
@@ -50,7 +51,23 @@ const Navbar = () => {
           <Link href="/api/auth/signin">Login</Link>
         )}
         {status === "authenticated" && (
-          <Link href="/api/auth/signout">Logout</Link>
+          <DropdownMenu.Root>
+            <DropdownMenu.Trigger>
+              <Avatar
+                src={session.user!.image!}
+                fallback="?"
+                radius="full"
+                size="2"
+                className="cursor-pointer"
+              />
+            </DropdownMenu.Trigger>
+            <DropdownMenu.Content variant="soft" size="2">
+              <DropdownMenu.Label>{session.user!.email}</DropdownMenu.Label>
+              <DropdownMenu.Item>
+                <Link href="/api/auth/signout">Logout</Link>
+              </DropdownMenu.Item>
+            </DropdownMenu.Content>
+          </DropdownMenu.Root>
         )}
       </div>
     </nav>

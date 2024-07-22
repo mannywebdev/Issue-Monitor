@@ -37,7 +37,7 @@ const DeleteIssueButton = ({ issueId }: { issueId: number }) => {
             and cannot be undone.
           </AlertDialog.Description>
 
-          <Flex gap="3" justify="end">
+          <Flex gap="3" justify="end" mt="3">
             <AlertDialog.Cancel>
               <Button variant="soft" color="gray">
                 Cancel
@@ -61,7 +61,7 @@ const DeleteIssueButton = ({ issueId }: { issueId: number }) => {
           <Button
             variant="soft"
             color="gray"
-            mt="2"
+            mt="3"
             onClick={() => setError(false)}
           >
             Ok

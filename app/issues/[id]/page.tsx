@@ -1,10 +1,10 @@
 import prisma from "@/prisma/client";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { IssueStatusBadge } from "@/app/components";
 import { Box, Button, Card, Flex, Grid, Heading, Text } from "@radix-ui/themes";
 import ReactMarkdown from "react-markdown";
 import { Pencil2Icon } from "@radix-ui/react-icons";
-import Link from "next/link";
 import DeleteIssueButton from "./DeleteIssueButton";
 import { getServerSession } from "next-auth";
 import authOptions from "@/app/auth/authOptions";
@@ -32,11 +32,13 @@ const IssueDetailPage = async ({ params }: { params: { id: string } }) => {
       {session && (
         <Box>
           <Flex gap="3" direction="column" justify="end">
-            <AssigneeSelect />
-            <Button variant="soft">
-              <Pencil2Icon />
-              <Link href={`/issues/${issue.id}/edit`}>Edit Issues</Link>
-            </Button>
+            <AssigneeSelect issue={issue} />
+            <Link href={`/issues/${issue.id}/edit`} legacyBehavior>
+              <Button variant="soft">
+                <Pencil2Icon />
+                Edit Issues
+              </Button>
+            </Link>
             <DeleteIssueButton issueId={issue.id} />
           </Flex>
         </Box>

@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import prisma from "@/prisma/client";
-import { issueSchema } from "@/app/validationSchema";
+import { updateIssueSchema } from "@/app/validationSchema";
 import { sendErrorResponse, sendSuccessResponse } from "../../responseUtils";
 import authOptions from "@/app/auth/authOptions";
 import { getServerSession } from "next-auth";
@@ -12,7 +12,7 @@ export async function PATCH(
   const session = await getServerSession(authOptions);
   if (!session) return sendErrorResponse("Unauthorized", 401);
   const body = await request.json();
-  const validation = issueSchema.safeParse(body);
+  const validation = updateIssueSchema.safeParse(body);
   if (!validation.success) {
     const firstError = validation.error.issues[0];
     const path = firstError.path.join(".");
@@ -22,6 +22,14 @@ export async function PATCH(
       400
     );
   }
+  const { title, description, assignedToUserId } = body;
+  if (assignedToUserId) {
+    const user = await prisma.user.findUnique({
+      where: { id: assignedToUserId },
+    });
+    if (!user) return sendErrorResponse("Invalid User", 400);
+  }
+
   const issue = await prisma.issue.findUnique({
     where: { id: parseInt(params.id) },
   });
@@ -30,7 +38,9 @@ export async function PATCH(
   const updatedIssue = await prisma.issue.update({
     where: { id: issue.id },
     data: {
-      ...body,
+      title,
+      description,
+      assignedToUserId,
     },
   });
   return sendSuccessResponse(updatedIssue, 201);

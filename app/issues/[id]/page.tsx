@@ -47,4 +47,6 @@ const IssueDetailPage = async ({ params }: { params: { id: string } }) => {
   );
 };
 
+export const dynamic = "force-dynamic";
+
 export default IssueDetailPage;

@@ -6,6 +6,7 @@ import { Montserrat } from "next/font/google";
 import { Theme, ThemePanel } from "@radix-ui/themes";
 import Navbar from "./Navbar";
 import AuthProvider from "./auth/Provider";
+import QueryClientProvider from "./QueryProvider";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -26,12 +27,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={montserrat.variable}>
-        <AuthProvider>
-          <Theme accentColor="amber">
-            <Navbar />
-            <main className="container mx-auto px-4 py-8">{children}</main>
-          </Theme>
-        </AuthProvider>
+        <QueryClientProvider>
+          <AuthProvider>
+            <Theme accentColor="amber">
+              <Navbar />
+              <main className="container mx-auto px-4 py-8">{children}</main>
+            </Theme>
+          </AuthProvider>
+        </QueryClientProvider>
       </body>
     </html>
   );

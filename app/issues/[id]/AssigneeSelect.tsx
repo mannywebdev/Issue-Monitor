@@ -7,16 +7,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
 
 const AssigneeSelect = ({ issue }: { issue: Issue }) => {
-  const {
-    data: users,
-    isLoading,
-    isError,
-  } = useQuery<User[]>({
-    queryKey: ["users"],
-    queryFn: () => axios.get("/api/users").then((res) => res.data.data),
-    staleTime: 1000 * 30,
-    retry: 3,
-  });
+  const { data: users, isLoading, isError } = useUsers();
 
   const assignIssue = async (userId: string) => {
     try {
@@ -61,5 +52,13 @@ const AssigneeSelect = ({ issue }: { issue: Issue }) => {
     </>
   );
 };
+
+const useUsers = () =>
+  useQuery<User[]>({
+    queryKey: ["users"],
+    queryFn: () => axios.get("/api/users").then((res) => res.data.data),
+    staleTime: 1000 * 30,
+    retry: 3,
+  });
 
 export default AssigneeSelect;

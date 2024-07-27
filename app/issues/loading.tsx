@@ -1,13 +1,13 @@
 import React from "react";
 import { Skeleton, Table } from "@radix-ui/themes";
-import NewIssueAction from "./NewIssueAction";
+import IssueActions from "./IssueActions";
 
 const loading = () => {
   const issues = [1, 2, 3, 4, 5, 6, 7];
 
   return (
     <>
-      <NewIssueAction />
+      <IssueActions />
       <Table.Root variant="surface">
         <Table.Header>
           <Table.Row>

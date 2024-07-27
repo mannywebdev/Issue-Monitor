@@ -1,14 +1,20 @@
 import prisma from "@/prisma/client";
 import { Table } from "@radix-ui/themes";
 import Link from "next/link";
-import { IssueStatusBadge, Link as TitleLink } from "../components";
+import { IssueStatusBadge, Pagination, Link as TitleLink } from "../components";
 import IssueActions from "./IssueActions";
 import { Issue, Status } from "@prisma/client";
 import { ArrowUpIcon, ArrowDownIcon } from "@radix-ui/react-icons";
 interface Props {
-  searchParams: { status: Status; orderBy: keyof Issue; sort: "asc" | "desc" };
+  searchParams: {
+    status: Status;
+    orderBy: keyof Issue;
+    sort: "asc" | "desc";
+    page: string;
+  };
 }
 
+const pageSize = 9;
 const validStatuses = Object.values(Status);
 const validColumns = ["title", "status", "createdAt"];
 const validSortDirections = ["asc", "desc"];
@@ -33,10 +39,18 @@ const IssuesPage = async ({ searchParams }: Props) => {
     ? searchParams.sort
     : "asc";
 
+  const page = parseInt(searchParams.page) || 1;
+
+  const where = { status };
+
   const issues = await prisma.issue.findMany({
-    where: { status },
+    where,
     orderBy: { [orderBy]: sort },
+    skip: (page - 1) * pageSize,
+    take: pageSize,
   });
+
+  const issueCount = await prisma.issue.count({ where });
 
   const getNextSortDirection = (currentSort: "asc" | "desc") =>
     currentSort === "asc" ? "desc" : "asc";
@@ -44,7 +58,7 @@ const IssuesPage = async ({ searchParams }: Props) => {
   return (
     <>
       <IssueActions />
-      <Table.Root variant="surface">
+      <Table.Root variant="surface" className="mb-5">
         <Table.Header>
           <Table.Row>
             {columns.map((column) => {
@@ -98,6 +112,11 @@ const IssuesPage = async ({ searchParams }: Props) => {
           ))}
         </Table.Body>
       </Table.Root>
+      <Pagination
+        currentPage={page}
+        pageSize={pageSize}
+        itemCount={issueCount}
+      />
     </>
   );
 };

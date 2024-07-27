@@ -9,11 +9,20 @@ interface Props {
   searchParams: { status: Status; orderBy: keyof Issue; sort: "asc" | "desc" };
 }
 
-const IssuesPage = async ({ searchParams }: Props) => {
-  const validStatuses = Object.values(Status);
-  const validColumns = ["title", "status", "createdAt"];
-  const validSortDirections = ["asc", "desc"];
+const validStatuses = Object.values(Status);
+const validColumns = ["title", "status", "createdAt"];
+const validSortDirections = ["asc", "desc"];
+const columns: { label: string; value: keyof Issue; className?: string }[] = [
+  { label: "Issue", value: "title" },
+  { label: "Status", value: "status", className: "hidden md:table-cell" },
+  {
+    label: "Created On",
+    value: "createdAt",
+    className: "hidden md:table-cell",
+  },
+];
 
+const IssuesPage = async ({ searchParams }: Props) => {
   const status = validStatuses.includes(searchParams.status)
     ? searchParams.status
     : undefined;
@@ -28,16 +37,6 @@ const IssuesPage = async ({ searchParams }: Props) => {
     where: { status },
     orderBy: { [orderBy]: sort },
   });
-
-  const columns: { label: string; value: keyof Issue; className?: string }[] = [
-    { label: "Issue", value: "title" },
-    { label: "Status", value: "status", className: "hidden md:table-cell" },
-    {
-      label: "Created On",
-      value: "createdAt",
-      className: "hidden md:table-cell",
-    },
-  ];
 
   const getNextSortDirection = (currentSort: "asc" | "desc") =>
     currentSort === "asc" ? "desc" : "asc";

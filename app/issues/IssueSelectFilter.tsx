@@ -16,9 +16,16 @@ const IssueSelectFilter = () => {
   return (
     <>
       <Select.Root
-        defaultValue={searchParams.get("status") || "all"}
+        defaultValue={searchParams.get("status") || "ALL"}
         onValueChange={(status) => {
-          const query = status === "all" ? "" : `?status=${status}`;
+          const params = new URLSearchParams();
+          if (status && status !== "ALL") params.append("status", status);
+          if (searchParams.get("orderBy"))
+            params.append("orderBy", searchParams.get("orderBy")!);
+          if (searchParams.get("sort"))
+            params.append("sort", searchParams.get("sort")!);
+
+          const query = params.size ? "?" + params.toString() : "";
           router.push("/issues" + query);
         }}
       >
@@ -26,7 +33,10 @@ const IssueSelectFilter = () => {
         <Select.Content>
           <Select.Group>
             {statuses?.map((status) => (
-              <Select.Item key={status.value} value={status.value || "all"}>
+              <Select.Item
+                key={status.value || "ALL"}
+                value={status.value || "ALL"}
+              >
                 {status.label}
               </Select.Item>
             ))}

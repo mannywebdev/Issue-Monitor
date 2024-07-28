@@ -5,6 +5,7 @@ import { IssueStatusBadge, Pagination, Link as TitleLink } from "../components";
 import IssueActions from "./IssueActions";
 import { Issue, Status } from "@prisma/client";
 import { ArrowUpIcon, ArrowDownIcon } from "@radix-ui/react-icons";
+import { Metadata } from "next";
 interface Props {
   searchParams: {
     status: Status;
@@ -122,5 +123,10 @@ const IssuesPage = async ({ searchParams }: Props) => {
 };
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Issue Monitor - Issue Listing",
+  description: "View all issues list",
+};
 
 export default IssuesPage;
